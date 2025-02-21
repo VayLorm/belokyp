@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Загадка о дате</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* style.css */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(to right, #4a90e2, #63b8ff);
+        }
+        
+        .container {
+            width: 80%;
+            max-width: 600px;
+            padding: 20px;
+        }
+        
+        .riddle-box {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #333;
+        }
+        
+        p {
+            font-size: 18px;
+            color: #555;
+        }
+        
+        input[type="date"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        button {
+            background-color: #5cb85c;
+            color: white;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background-color: #449d44;
+        }
+        
+        #message {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="riddle-box">
+            <h1>Загадка:</h1>
+            <p>Этот день был особенным, ты сказал заветное 'Да'.<br>
+            С тех пор ты стал не только братом, но и женатым навсегда.<br>
+            Какой это день?</p>
+            <p>P.s. советую разгадывать рядом с кем то)</p>
+            <input type="date" id="dateInput">
+            <button id="submit">Проверить</button>
+            <p id="message"></p>
+        </div>
+    </div>
+    <script>
+        // script.js
+        document.addEventListener('DOMContentLoaded', function() {
+            const dateInput = document.getElementById('dateInput');
+            const submitButton = document.getElementById('submit');
+            const message = document.getElementById('message');
+            const correctDate = '2021-08-23'; // Укажите правильную дату в формате YYYY-MM-DD
+            let attempts = 0;
+
+            submitButton.addEventListener('click', function() {
+                const userDate = dateInput.value;
+
+                if (userDate === correctDate) {
+                    message.textContent = "Правильно! Переход на главную страницу...";
+                    message.style.color = "green";
+                    setTimeout(function() {
+                        window.location.href = 'index.html'; // Переход на главную страницу
+                    }, 2000);
+                } else {
+                    attempts++;
+                    if (attempts >= 5) {
+                        message.textContent = "Подсказка: Дата свадьбы.";
+                        message.style.color = "blue";
+                        attempts = 0; // Сброс попыток после подсказки
+                    } else {
+                        message.textContent = "Неправильно, попробуйте ещё раз.";
+                        message.style.color = "red";
+                    }
+                }
+                
+                dateInput.value = ''; // Очистка поля ввода после каждой попытки
+            });
+        });
+    </script>
+</body>
+</html>

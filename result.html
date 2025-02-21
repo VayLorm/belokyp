@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Описание результата</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+        }
+
+        .image-container {
+            flex: 1;
+            max-width: 33.33%;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .description-container {
+            flex: 2;
+            max-width: 66.67%;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        #result-description {
+            font-size: 1.2em;
+            color: #666;
+            margin-top: 20px;
+        }
+
+        a {
+            color: #0073e6;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .back-button {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #0073e6;
+            color: white;
+            border-radius: 5px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-button:hover {
+            background-color: #005bb5;
+        }
+    </style>
+</head>
+<body>
+    <h1>Читай информацию ниже</h1>
+    
+    <div class="container">
+        <div class="image-container">
+            <img id="result-image" src="" alt="Картинка">
+        </div>
+        
+        <div class="description-container">
+            <p id="result-description"></p>
+            
+            <a class="back-button" href="index.html">Назад к галерее</a>
+        </div>
+    </div>
+
+    <script>
+        function getParameterByName(name, url = window.location.href) {
+            name = name.replace(/[\[\]]/g, '\\$&');
+            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
+
+        const imageUrl = getParameterByName('image');
+        
+        // Извлекаем имя файла без расширения
+        const imageName = imageUrl.split('/').pop().split('.')[0]; 
+        const descriptionFileName = `images/${imageName}.txt`; // Формируем имя текстового файла с учетом пути
+
+        document.getElementById('result-image').src = imageUrl;
+
+        // Загружаем текст
+        fetch(descriptionFileName)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Файл не найден: ' + descriptionFileName);
+                }
+                return response.text();
+            })
+            .then(text => {
+                // Заменяем символы новой строки на теги <br>
+                const formattedText = text.replace(/\n/g, '<br>');
+                document.getElementById('result-description').innerHTML = formattedText; // Используем innerHTML для вставки HTML
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                document.getElementById('result-description').textContent = 'Описание не найдено.';
+            });
+    </script>
+</body>
+</html>
