@@ -73,7 +73,7 @@
             <h1>Загадка:</h1>
             <p>Этот день был особенным, ты сказал заветное 'Да'.<br>
             С тех пор ты стал не только братом, но и ... навсегда.<br>
-            Какой это день?</p>
+            Какой это день? (была ошибка на день в дате, я исправил)</p>
             <p>P.s. советую разгадывать рядом с кем то)</p>
             <input type="date" id="dateInput">
             <button id="submit">Проверить</button>
@@ -81,38 +81,40 @@
         </div>
     </div>
     <script>
-        // script.js
         document.addEventListener('DOMContentLoaded', function() {
             const dateInput = document.getElementById('dateInput');
             const submitButton = document.getElementById('submit');
             const message = document.getElementById('message');
-            const correctDate = '2021-08-23'; // Укажите правильную дату в формате YYYY-MM-DD
+            const correctDate = new Date('2021-08-18'); // Преобразуем строку в объект Date
             let attempts = 0;
-
+        
             submitButton.addEventListener('click', function() {
-                const userDate = dateInput.value;
-
-                if (userDate === correctDate) {
+                const userDate = new Date(dateInput.value); // Преобразуем ввод в Date
+                
+                // Вычисляем разницу в днях
+                const diffDays = Math.abs((userDate - correctDate) / (1000 * 60 * 60 * 24));
+                
+                if (diffDays <= 10) {
                     message.textContent = "Правильно! Переход на главную страницу...";
                     message.style.color = "green";
                     setTimeout(function() {
-                        window.location.href = 'index.html'; // Переход на главную страницу
+                        window.location.href = 'index.html';
                     }, 2000);
                 } else {
                     attempts++;
                     if (attempts >= 5) {
-                        message.textContent = "Подсказка: пропущенное слово - женатым. Дата - дата свадьбы.";
+                        message.textContent = "18 .. ....";
                         message.style.color = "blue";
-                        attempts = 0; // Сброс попыток после подсказки
+                        attempts = 0;
                     } else {
                         message.textContent = "Неправильно, попробуйте ещё раз.";
                         message.style.color = "red";
                     }
                 }
                 
-                dateInput.value = ''; // Очистка поля ввода после каждой попытки
+                dateInput.value = '';
             });
-        });
+        });        
     </script>
 </body>
 </html>
